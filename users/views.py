@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, reverse
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import User
 from django.core.exceptions import  ObjectDoesNotExist
+
 
 def index(request):
     user_list   = User.objects.order_by('-pub_date')[:5]
@@ -11,7 +12,7 @@ def index(request):
 def add(request):
     return render(request, 'users/add.html')
 
-def processAdd(request):
+def processadd(request):
     fname = request.POST.get('fname')
     lname = request.POST.get('lname')
     email = request.POST.get('email')
@@ -29,3 +30,46 @@ def processAdd(request):
         user = User.objects.create(user_email=email, user_fname=fname, user_lname=lname, user_position=position, user_image=user_pic)
         user.save()
         return HttpResponseRedirect('/users')
+
+def detail(request, profile_id):
+    try:
+        user = User.objects.get(pk=profile_id)
+    except user.DoesNotExist:
+        raise Http404("Profile does not exist")
+    return render(request,'users/detail.html', {'user':user})
+
+def delete(request, profile_id):
+    User.objects.filter(id=profile_id).delete()
+    return HttpResponseRedirect("/users")
+
+def edit(request, profile_id):
+    try:
+        user = User.objects.get(pk=profile_id)
+    except user.DoesNotExist:
+        raise Http404("Profile does not exist")
+    return render(request,'users/edit.html', {'user':user})
+
+def processedit(request, profile_id):
+    
+    user = get_object_or_404(User, pk=profile_id) 
+    profile_pic = request.FILES.get('image')
+    try:
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        position = request.POST.get('position')
+    except (KeyError, User.DoesNotExist):
+        return render(request, 'users/detail.html', {
+            'user': user,
+            'error_message':'Problem updating record',
+        })
+    else:
+        user_profile = User.objects.get(id=profile_id)
+        user_profile.user_fname = fname
+        user_profile.user_lname = lname
+        user_profile.user_email = email
+        user_profile.user_position = position
+        if profile_pic:
+            user_profile.user_image = profile_pic
+        user_profile.save()
+        return HttpResponseRedirect(reverse('users:detail', args=(profile_id, )))

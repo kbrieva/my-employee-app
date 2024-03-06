@@ -23,7 +23,10 @@
                 <td>{{ user.user_fname}}</td>
                 <td>{{ user.user_lname}}</td>
                 <td>{{ user.user_email}}</td>
-                <td class="text-center"><img src="media/{{ user.user_image}}" alt="userimage" width="50 height="50" class="rounded-circle"></td>
+                <td class="text-center">
+                    <a href="{% url 'users:detail' user.id %}">
+        
+                    <img src="media/{{ user.user_image}}" alt="userimage" width="50 height="50" class="rounded-circle"></a></td>
             </tr>
             {% endfor %}
         </tbody>
