@@ -9,7 +9,9 @@
 {% block content %}
 
 {% if error_message %}
-<p class="alert alert-danger"><strong>{{ error_message }} </strong> </p>
+<div class="alert alert-dark" role="alert">
+   {{ error_message }}
+</div>
 {% endif %}
 <form action="{% url 'users:processedit' user.id %}" method="post" enctype="multipart/form-data">
    {% csrf_token %}
