@@ -8,6 +8,7 @@ app_name = 'users'
 urlpatterns = [
     path('', views.index, name="index"),
     path('add', views.add, name="add"),
+    path('search', views.search, name="search"),
     path('processadd', views.processadd, name='processadd'),
     path('<int:profile_id>/detail/', views.detail, name='detail'),
     path('<int:profile_id>/delete/', views.delete, name='delete'),

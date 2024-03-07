@@ -5,6 +5,17 @@
 {% endblock %}
 
 {% block content %}
+
+    <form action="{% url 'users:search' %}" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control link-info" name="search" placeholder="search" required>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-success">Search</button>
+            </div>
+        </div>
+    </form>
+
+
     <h1 class="text-center mb-4">Profiler App</h1>
     {% if page_obj %}
     <div class="table-responsive">
@@ -46,7 +57,7 @@
         {% endif %}
 
     </ul>
-    
+
     {% else %}
 
     <p>No record available</p>

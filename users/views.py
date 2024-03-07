@@ -1,12 +1,25 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import User
+from django.db.models import Q
 from django.core.paginator import Paginator
 from django.core.exceptions import  ObjectDoesNotExist
 
 
 def index(request):
     user_list   = User.objects.all().order_by('-id')
+    paginator = Paginator(user_list, 5)
+
+    page_number = request.GET.get("page")
+    
+    user_list = paginator.get_page(page_number)
+
+    return render(request, 'users/index.html', {'page_obj': user_list})
+
+def search(request):
+    term = request.GET.get('search', '')
+    user_list = User.objects.filter(Q(user_fname__icontains=term) | Q(user_lname__icontains=term)).order_by('-id')
+
     paginator = Paginator(user_list, 5)
 
     page_number = request.GET.get("page")
