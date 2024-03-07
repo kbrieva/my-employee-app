@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block content %}
+
+
 {% if error_message %}
 <p class="alert alert-danger"><strong>{{ error_message }} </strong> </p>
 {% endif %}
@@ -17,9 +19,13 @@
 </div>
 
 <div class="btn-group mt-5">
+
+    {% if request.user.is_staff %}
     <a href="{% url 'users:delete' user.id %}" class="btn btn-sm btn-danger">Delete</a>
     <a href="{% url 'users:edit' user.id %}" class="btn btn-sm btn-info">Edit</a>
+    {% endif %}
     <a href="{% url 'users:index' %}" class="btn btn-sm btn-success">Return</a>
+    
 </div>
 </div>
 

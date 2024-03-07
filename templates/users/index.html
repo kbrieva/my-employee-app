@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-
+    <h3 class="mb-3">Welcome {{ user }} </h3>
     <form action="{% url 'users:search' %}" method="get">
         <div class="input-group">
-            <input type="text" class="form-control link-info" name="search" placeholder="search" required>
+            <input type="text" class="form-control" name="search" placeholder="search" required>
             <div class="input-group-append">
                 <button type="submit" class="btn btn-success">Search</button>
             </div>
