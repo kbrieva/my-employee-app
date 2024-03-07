@@ -10,23 +10,63 @@
 {% if error_message %}
 <p class="alert alert-danger"><strong>{{ error_message }} </strong> </p>
 {% endif %}
-<div class="text-center mb-5">
-<h1>{{ user.user_fname }}  {{ user.user_lname }} </h1>
-<p class="text-muted">{{ user.user_email }}</p>
-<p>Position: {{ user.user_position }}</p>
-<div class="img-responsive text-center">
-    <img src="/users/media/{{ user.user_image}}" alt="user profie" class="rounded-circle" width="300">
-</div>
 
-<div class="btn-group mt-5">
+<div class="row">
 
-    {% if request.user.is_staff %}
-    <a href="{% url 'users:delete' user.id %}" class="btn btn-sm btn-danger">Delete</a>
-    <a href="{% url 'users:edit' user.id %}" class="btn btn-sm btn-info">Edit</a>
-    {% endif %}
-    <a href="{% url 'users:index' %}" class="btn btn-sm btn-success">Return</a>
+    <div class="col-lg-6">
+        <div class="text-center mb-5">
+            <h1>{{ user.user_fname }}  {{ user.user_lname }} </h1>
+            <p class="text-muted">{{ user.user_email }}</p>
+            <p>Position: {{ user.user_position }}</p>
+            <div class="img-responsive text-center">
+                <img src="/users/media/{{ user.user_image}}" alt="user profie" class="rounded-circle" width="300">
+            </div>
+            
+            <div class="btn-group mt-5">
+            
+                {% if request.user.is_staff %}
+                <a href="{% url 'users:delete' user.id %}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="{% url 'users:edit' user.id %}" class="btn btn-sm btn-info">Edit</a>
+                {% endif %}
+                <a href="{% url 'users:index' %}" class="btn btn-sm btn-success">Return</a>
+                
+            </div>
+            </div>
+    </div>
+    <div class="col-lg-6">
+        <h2>Comments</h2>
+        <p class="text-muted">Total of:  {{ comments_count }}</p>
+        {% if comments_count > 0 %}
+            {% for comment in comments %}
+            
+            
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header"><strong>{{ comment.name }}</strong></div>
+            
+            <div class="card-body text-dark">
+              
+              <p class="card-text"> {{ comment.body }}</p>
+            </div>
+        </div>
+            {% endfor %}
+        {% endif %}
+
+        <hr>
+        <br>
+        <form action="{% url 'users:addcomment' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="">Comment</label>
+                <textarea name="comment" id="comment" cols="30" rows="5" class="form-control"></textarea>
+            </div>
+            <input type="text" name='user_id' id='user_id' value='{{ user.id }}'>
+            <input type="text" name='name' id='name' value='{{ user.username }}'>
+            <input type="text" name='email' id='email' value='{{ user.email }}'>
+            <button type="submit" class="btn btn-primary">Add Comment</button>
+        </form>
+        
+    </div>
     
-</div>
 </div>
 
 {% endblock %}
