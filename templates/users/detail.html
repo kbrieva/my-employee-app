@@ -38,7 +38,7 @@
         <p class="text-muted">Total of:  {{ comments_count }}</p>
         {% if comments_count > 0 %}
             {% for comment in comments %}
-            
+                {% if comment.active %}
             
         <div class="card border-dark mb-3" style="max-width: 18rem;">
             <div class="card-header"><strong>{{ comment.name }}</strong></div>
@@ -47,6 +47,7 @@
               
               <p class="card-text"> {{ comment.body }}</p>
             </div>
+                {% endif %}
         </div>
             {% endfor %}
         {% endif %}
